@@ -59,6 +59,5 @@ const handleChange = (e) => {
   
 }
 Form.propTypes = {
-  onChange: PropTypes.func,
   onSubmit: PropTypes.func,
 }
