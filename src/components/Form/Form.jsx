@@ -1,49 +1,62 @@
-import { Component } from "react";
+
 import css from './Form.module.css';
 import PropTypes from 'prop-types';
+import { useState } from "react";
 
-export class Form extends Component{
-  state = {
-    name: '',
-    number: '',
-}
+export const Form = ({onSubmit})=> {
+  const [name, setName] = useState('');
+  const [number, setNumber]= useState('')
 
-handleChange = (e) => {
-    const { name, value } = e.target
-    this.setState({ [name]: value})
+ 
+const handleChange = (e) => {
+  const { name } = e.target
+  switch (name) {
+    case 'name':
+      setName(e.target.value)
+      break;
+    case 'number':
+      setNumber(e.target.value)
+      break;
+    default:
+      throw new Error('error');
+  }
+  
   };
 
-  handleSubmit = (e) => {
-    this.props.onSubmit(this.state)
-
-
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    onSubmit({ name, number })
+    setName('')
+    setNumber('')
   }
 
-  render() {
-    return <>
-  < form className={css.form} onSubmit={this.handleSubmit} >
+  
+    return (<>
+  < form className={css.form} onSubmit={handleSubmit} >
 <label className={css.label} htmlFor="name">Name</label>
-      <input className={css.input}
-        onChange={this.handleChange}
-  type="text"
-  name="name"
-  pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+        <input className={css.input}
+          value={name}
+          onChange={handleChange}
+          type="text"
+          name="name"
+          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
            required
         />
         
       <label className={css.label} htmlFor="number">Number</label>
-      <input className={css.input}
-      onChange={this.handleChange}
+        <input className={css.input}
+          value={number}
+      onChange={handleChange}
       type="tel"
-          name="number"
-           required
+      name="number"
+      required
       />
       <button className={css.btn} type="submit">Add contact</button>
       </form>
 
-</>
-} 
+  </>)
+  
 }
 Form.propTypes = {
   onChange: PropTypes.func,
